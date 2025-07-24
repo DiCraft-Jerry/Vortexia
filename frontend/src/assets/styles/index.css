@@ -1,0 +1,52 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* 自定义样式 */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Antd 样式覆盖 */
+.ant-layout-sider {
+  box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
+}
+
+.ant-menu-item-selected {
+  background-color: #f0f9ff !important;
+  border-right: 3px solid #1890ff !important;
+}
+
+.ant-menu-item:hover {
+  background-color: #f8fafc !important;
+}
+
+/* 工具类 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 构建状态颜色 */
+.build-status-pending {
+  color: #d4b106;
+}
+
+.build-status-running {
+  color: #1890ff;
+}
+
+.build-status-success {
+  color: #52c41a;
+}
+
+.build-status-failed {
+  color: #ff4d4f;
+}
+
+.build-status-canceled {
+  color: #8c8c8c;
+} 
