@@ -64,7 +64,7 @@ func Load() (*Config, error) {
 			DB:       getEnvAsInt("REDIS_DB", 0),
 		},
 		JWT: JWTConfig{
-			Secret: getEnv("JWT_SECRET", "simple-ci-secret-key"),
+			Secret: getEnv("JWT_SECRET", "vortexia-secret-key"),
 			Expire: getEnvAsInt("JWT_EXPIRE", 7200), // 2小时
 		},
 	}
@@ -86,4 +86,4 @@ func getEnvAsInt(key string, defaultValue int) int {
 		}
 	}
 	return defaultValue
-} 
+}

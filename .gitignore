@@ -1,0 +1,74 @@
+# 依赖目录
+node_modules/
+vendor/
+
+# 构建产物
+/frontend/dist/
+/backend/vortexia-server
+/backend/*.exe
+/backend/*.bin
+/backend/main
+*.out
+
+# Go 相关
+go.sum
+*.mod.sum
+
+# 环境配置文件
+.env
+.env.local
+.env.development
+.env.production
+*.env
+
+# 日志文件
+*.log
+logs/
+*.log.*
+
+# 临时文件
+tmp/
+temp/
+.tmp/
+
+# IDE 和编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 测试覆盖率
+coverage/
+*.cover
+*.out
+
+# 缓存目录
+.cache/
+.npm/
+.yarn/
+
+# 包管理器锁文件 (可选择保留package-lock.json)
+# package-lock.json
+# yarn.lock
+
+# Docker 相关
+.dockerignore
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 系统文件
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# 运行时文件
+pids/
+*.pid
+*.seed
+*.pid.lock

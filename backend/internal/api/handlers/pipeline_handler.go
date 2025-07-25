@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"simple-ci/internal/model"
-	"simple-ci/internal/service"
+	"Vortexia/internal/model"
+	"Vortexia/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,4 +66,4 @@ func (h *PipelineHandler) GetByProject(c *gin.Context) {
 		Message: "功能开发中",
 		Data:    []interface{}{},
 	})
-} 
+}

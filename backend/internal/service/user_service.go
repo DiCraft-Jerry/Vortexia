@@ -4,8 +4,8 @@ import (
 	"errors"
 	"math"
 
-	"simple-ci/internal/model"
-	"simple-ci/internal/repository"
+	"Vortexia/internal/model"
+	"Vortexia/internal/repository"
 )
 
 type userService struct {
@@ -143,4 +143,4 @@ func (s *userService) List(page, pageSize int) (*model.PaginationResponse, error
 		PageSize:   pageSize,
 		TotalPages: totalPages,
 	}, nil
-} 
+}

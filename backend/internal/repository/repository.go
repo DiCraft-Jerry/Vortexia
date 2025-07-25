@@ -3,9 +3,9 @@ package repository
 import (
 	"database/sql"
 
-	"simple-ci/internal/model"
+	"Vortexia/internal/model"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 // Repositories 包含所有仓库接口
@@ -64,9 +64,9 @@ type BuildRepository interface {
 	GetByPipeline(pipelineID int, offset, limit int) ([]*model.Build, int, error)
 	UpdateStatus(id int, status string) error
 	List(offset, limit int) ([]*model.Build, int, error)
-	
+
 	// 构建步骤相关
 	CreateStep(step *model.BuildStep) error
 	GetStepsByBuild(buildID int) ([]*model.BuildStep, error)
 	UpdateStepStatus(id int, status string, output string) error
-} 
+}

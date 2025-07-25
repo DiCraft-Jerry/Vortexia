@@ -85,7 +85,7 @@ CREATE INDEX idx_build_steps_order ON build_steps(step_order);
 -- 插入默认管理员用户
 -- 密码是 admin123 的哈希值
 INSERT INTO users (username, email, password_hash, role, is_active) 
-VALUES ('admin', 'admin@simple-ci.com', '$2a$10$D4L/4.e/LZJ8MdZ8l9U./.WuGF4ByX4vP7vQ3KQXKXVWxqWYpSd1C', 'admin', true);
+VALUES ('admin', 'admin@vortexia.com', '$2a$10$D4L/4.e/LZJ8MdZ8l9U./.WuGF4ByX4vP7vQ3KQXKXVWxqWYpSd1C', 'admin', true);
 
 -- +goose Down
 DROP TABLE IF EXISTS build_steps;

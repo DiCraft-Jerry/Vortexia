@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"simple-ci/internal/model"
+	"Vortexia/internal/model"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 type buildRepository struct {
@@ -26,7 +26,7 @@ func (r *buildRepository) Create(build *model.Build) error {
 		INSERT INTO builds (pipeline_id, branch, commit, status, started_at, trigger_by, created_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id`
-	
+
 	now := time.Now()
 	err := r.db.QueryRow(
 		query,
@@ -38,11 +38,11 @@ func (r *buildRepository) Create(build *model.Build) error {
 		build.TriggerBy,
 		now,
 	).Scan(&build.ID)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to create build: %w", err)
 	}
-	
+
 	build.CreatedAt = now
 	return nil
 }
@@ -53,7 +53,7 @@ func (r *buildRepository) GetByID(id int) (*model.Build, error) {
 		SELECT id, pipeline_id, branch, commit, status, started_at, finished_at, duration, trigger_by, created_at
 		FROM builds
 		WHERE id = $1`
-	
+
 	build := &model.Build{}
 	err := r.db.QueryRow(query, id).Scan(
 		&build.ID,
@@ -67,14 +67,14 @@ func (r *buildRepository) GetByID(id int) (*model.Build, error) {
 		&build.TriggerBy,
 		&build.CreatedAt,
 	)
-	
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("failed to get build by id: %w", err)
 	}
-	
+
 	return build, nil
 }
 
@@ -87,7 +87,7 @@ func (r *buildRepository) GetByPipeline(pipelineID int, offset, limit int) ([]*m
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count builds: %w", err)
 	}
-	
+
 	// 获取列表
 	query := `
 		SELECT id, pipeline_id, branch, commit, status, started_at, finished_at, duration, trigger_by, created_at
@@ -95,13 +95,13 @@ func (r *buildRepository) GetByPipeline(pipelineID int, offset, limit int) ([]*m
 		WHERE pipeline_id = $1
 		ORDER BY created_at DESC
 		LIMIT $2 OFFSET $3`
-	
+
 	rows, err := r.db.Query(query, pipelineID, limit, offset)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to get builds by pipeline: %w", err)
 	}
 	defer rows.Close()
-	
+
 	var builds []*model.Build
 	for rows.Next() {
 		build := &model.Build{}
@@ -122,7 +122,7 @@ func (r *buildRepository) GetByPipeline(pipelineID int, offset, limit int) ([]*m
 		}
 		builds = append(builds, build)
 	}
-	
+
 	return builds, total, nil
 }
 
@@ -130,7 +130,7 @@ func (r *buildRepository) GetByPipeline(pipelineID int, offset, limit int) ([]*m
 func (r *buildRepository) UpdateStatus(id int, status string) error {
 	var query string
 	var args []interface{}
-	
+
 	if status == model.BuildStatusSuccess || status == model.BuildStatusFailed || status == model.BuildStatusCanceled {
 		// 完成状态，更新结束时间和持续时间
 		query = `
@@ -144,12 +144,12 @@ func (r *buildRepository) UpdateStatus(id int, status string) error {
 		query = `UPDATE builds SET status = $1 WHERE id = $2`
 		args = []interface{}{status, id}
 	}
-	
+
 	_, err := r.db.Exec(query, args...)
 	if err != nil {
 		return fmt.Errorf("failed to update build status: %w", err)
 	}
-	
+
 	return nil
 }
 
@@ -162,20 +162,20 @@ func (r *buildRepository) List(offset, limit int) ([]*model.Build, int, error) {
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count builds: %w", err)
 	}
-	
+
 	// 获取列表
 	query := `
 		SELECT id, pipeline_id, branch, commit, status, started_at, finished_at, duration, trigger_by, created_at
 		FROM builds
 		ORDER BY created_at DESC
 		LIMIT $1 OFFSET $2`
-	
+
 	rows, err := r.db.Query(query, limit, offset)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to list builds: %w", err)
 	}
 	defer rows.Close()
-	
+
 	var builds []*model.Build
 	for rows.Next() {
 		build := &model.Build{}
@@ -196,7 +196,7 @@ func (r *buildRepository) List(offset, limit int) ([]*model.Build, int, error) {
 		}
 		builds = append(builds, build)
 	}
-	
+
 	return builds, total, nil
 }
 
@@ -206,7 +206,7 @@ func (r *buildRepository) CreateStep(step *model.BuildStep) error {
 		INSERT INTO build_steps (build_id, name, command, status, output, started_at, step_order)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id`
-	
+
 	err := r.db.QueryRow(
 		query,
 		step.BuildID,
@@ -217,11 +217,11 @@ func (r *buildRepository) CreateStep(step *model.BuildStep) error {
 		step.StartedAt,
 		step.StepOrder,
 	).Scan(&step.ID)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to create build step: %w", err)
 	}
-	
+
 	return nil
 }
 
@@ -232,13 +232,13 @@ func (r *buildRepository) GetStepsByBuild(buildID int) ([]*model.BuildStep, erro
 		FROM build_steps
 		WHERE build_id = $1
 		ORDER BY step_order ASC`
-	
+
 	rows, err := r.db.Query(query, buildID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get build steps: %w", err)
 	}
 	defer rows.Close()
-	
+
 	var steps []*model.BuildStep
 	for rows.Next() {
 		step := &model.BuildStep{}
@@ -259,7 +259,7 @@ func (r *buildRepository) GetStepsByBuild(buildID int) ([]*model.BuildStep, erro
 		}
 		steps = append(steps, step)
 	}
-	
+
 	return steps, nil
 }
 
@@ -267,7 +267,7 @@ func (r *buildRepository) GetStepsByBuild(buildID int) ([]*model.BuildStep, erro
 func (r *buildRepository) UpdateStepStatus(id int, status string, output string) error {
 	var query string
 	var args []interface{}
-	
+
 	if status == model.StepStatusSuccess || status == model.StepStatusFailed || status == model.StepStatusSkipped {
 		// 完成状态，更新结束时间和持续时间
 		query = `
@@ -281,11 +281,11 @@ func (r *buildRepository) UpdateStepStatus(id int, status string, output string)
 		query = `UPDATE build_steps SET status = $1, output = $2 WHERE id = $3`
 		args = []interface{}{status, output, id}
 	}
-	
+
 	_, err := r.db.Exec(query, args...)
 	if err != nil {
 		return fmt.Errorf("failed to update step status: %w", err)
 	}
-	
+
 	return nil
-} 
+}

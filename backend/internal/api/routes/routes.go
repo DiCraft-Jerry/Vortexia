@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"simple-ci/internal/api/handlers"
-	"simple-ci/internal/middleware"
-	"simple-ci/internal/service"
+	"Vortexia/internal/api/handlers"
+	"Vortexia/internal/middleware"
+	"Vortexia/internal/service"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -29,7 +29,7 @@ func SetupRoutes(services *service.Services, logger *zap.Logger) *gin.Engine {
 
 	// 健康检查
 	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "ok", "message": "Simple CI/CD is running"})
+		c.JSON(200, gin.H{"status": "ok", "message": "Vortexia is running"})
 	})
 
 	// Swagger文档
@@ -100,4 +100,4 @@ func SetupRoutes(services *service.Services, logger *zap.Logger) *gin.Engine {
 	}
 
 	return r
-} 
+}

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"simple-ci/internal/middleware"
-	"simple-ci/internal/model"
-	"simple-ci/internal/service"
+	"Vortexia/internal/middleware"
+	"Vortexia/internal/model"
+	"Vortexia/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -259,4 +259,4 @@ func (h *ProjectHandler) GetMyProjects(c *gin.Context) {
 		Message: "获取成功",
 		Data:    projects,
 	})
-} 
+}

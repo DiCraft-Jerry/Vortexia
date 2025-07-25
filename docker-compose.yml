@@ -4,9 +4,9 @@ services:
   # PostgreSQL数据库 - 轻量化配置
   postgres:
     image: postgres:15-alpine  # 使用alpine版本更轻量
-    container_name: simple-ci-postgres
+    container_name: vortexia-postgres
     environment:
-      POSTGRES_DB: simple_ci
+      POSTGRES_DB: vortexia_db
       POSTGRES_USER: ci_user
       POSTGRES_PASSWORD: ci_password
     volumes:
@@ -27,7 +27,7 @@ services:
   # Redis缓存 - 最小配置
   redis:
     image: redis:7-alpine
-    container_name: simple-ci-redis
+    container_name: vortexia-redis
     command: redis-server --maxmemory 100mb --maxmemory-policy allkeys-lru --save ""
     deploy:
       resources:
@@ -45,7 +45,7 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile.small
-    container_name: simple-ci-backend
+    container_name: vortexia-backend
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -76,7 +76,7 @@ services:
   # Nginx反向代理
   nginx:
     image: nginx:alpine
-    container_name: simple-ci-nginx
+    container_name: vortexia-nginx
     volumes:
       - ./frontend/dist:/usr/share/nginx/html
       - ./configs/nginx-small.conf:/etc/nginx/nginx.conf

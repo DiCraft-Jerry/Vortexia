@@ -1,8 +1,8 @@
 package service
 
 import (
-	"simple-ci/internal/model"
-	"simple-ci/internal/repository"
+	"Vortexia/internal/model"
+	"Vortexia/internal/repository"
 )
 
 type buildService struct {
@@ -60,4 +60,4 @@ func (s *buildService) UpdateStepStatus(stepID int, status string, output string
 func (s *buildService) ExecuteBuild(buildID int) error {
 	// TODO: 实现构建执行逻辑
 	return nil
-} 
+}

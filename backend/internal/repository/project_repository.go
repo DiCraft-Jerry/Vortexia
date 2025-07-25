@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"simple-ci/internal/model"
+	"Vortexia/internal/model"
 )
 
 type projectRepository struct {
@@ -23,7 +23,7 @@ func (r *projectRepository) Create(project *model.Project) error {
 		INSERT INTO projects (name, description, repo_url, branch, owner_id, is_active, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id`
-	
+
 	now := time.Now()
 	err := r.db.QueryRow(
 		query,
@@ -36,11 +36,11 @@ func (r *projectRepository) Create(project *model.Project) error {
 		now,
 		now,
 	).Scan(&project.ID)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to create project: %w", err)
 	}
-	
+
 	project.CreatedAt = now
 	project.UpdatedAt = now
 	return nil
@@ -52,7 +52,7 @@ func (r *projectRepository) GetByID(id int) (*model.Project, error) {
 		SELECT id, name, description, repo_url, branch, owner_id, is_active, created_at, updated_at
 		FROM projects
 		WHERE id = $1`
-	
+
 	project := &model.Project{}
 	err := r.db.QueryRow(query, id).Scan(
 		&project.ID,
@@ -65,14 +65,14 @@ func (r *projectRepository) GetByID(id int) (*model.Project, error) {
 		&project.CreatedAt,
 		&project.UpdatedAt,
 	)
-	
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("failed to get project by id: %w", err)
 	}
-	
+
 	return project, nil
 }
 
@@ -83,13 +83,13 @@ func (r *projectRepository) GetByOwner(ownerID int) ([]*model.Project, error) {
 		FROM projects
 		WHERE owner_id = $1 AND is_active = true
 		ORDER BY created_at DESC`
-	
+
 	rows, err := r.db.Query(query, ownerID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects by owner: %w", err)
 	}
 	defer rows.Close()
-	
+
 	var projects []*model.Project
 	for rows.Next() {
 		project := &model.Project{}
@@ -109,7 +109,7 @@ func (r *projectRepository) GetByOwner(ownerID int) ([]*model.Project, error) {
 		}
 		projects = append(projects, project)
 	}
-	
+
 	return projects, nil
 }
 
@@ -119,7 +119,7 @@ func (r *projectRepository) Update(project *model.Project) error {
 		UPDATE projects 
 		SET name = $1, description = $2, repo_url = $3, branch = $4, is_active = $5, updated_at = $6
 		WHERE id = $7`
-	
+
 	_, err := r.db.Exec(
 		query,
 		project.Name,
@@ -130,23 +130,23 @@ func (r *projectRepository) Update(project *model.Project) error {
 		time.Now(),
 		project.ID,
 	)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to update project: %w", err)
 	}
-	
+
 	return nil
 }
 
 // Delete 删除项目
 func (r *projectRepository) Delete(id int) error {
 	query := `UPDATE projects SET is_active = false WHERE id = $1`
-	
+
 	_, err := r.db.Exec(query, id)
 	if err != nil {
 		return fmt.Errorf("failed to delete project: %w", err)
 	}
-	
+
 	return nil
 }
 
@@ -159,7 +159,7 @@ func (r *projectRepository) List(offset, limit int) ([]*model.Project, int, erro
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count projects: %w", err)
 	}
-	
+
 	// 获取列表
 	query := `
 		SELECT id, name, description, repo_url, branch, owner_id, is_active, created_at, updated_at
@@ -167,13 +167,13 @@ func (r *projectRepository) List(offset, limit int) ([]*model.Project, int, erro
 		WHERE is_active = true
 		ORDER BY created_at DESC
 		LIMIT $1 OFFSET $2`
-	
+
 	rows, err := r.db.Query(query, limit, offset)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to list projects: %w", err)
 	}
 	defer rows.Close()
-	
+
 	var projects []*model.Project
 	for rows.Next() {
 		project := &model.Project{}
@@ -193,6 +193,6 @@ func (r *projectRepository) List(offset, limit int) ([]*model.Project, int, erro
 		}
 		projects = append(projects, project)
 	}
-	
+
 	return projects, total, nil
-} 
+}

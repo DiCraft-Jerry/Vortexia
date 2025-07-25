@@ -1,8 +1,8 @@
 package service
 
 import (
-	"simple-ci/internal/model"
-	"simple-ci/internal/repository"
+	"Vortexia/internal/model"
+	"Vortexia/internal/repository"
 )
 
 // Services 包含所有服务接口
@@ -69,9 +69,9 @@ type BuildService interface {
 	GetByPipeline(pipelineID int, page, pageSize int) (*model.PaginationResponse, error)
 	UpdateStatus(id int, status string) error
 	List(page, pageSize int) (*model.PaginationResponse, error)
-	
+
 	// 构建步骤相关
 	GetSteps(buildID int) ([]*model.BuildStep, error)
 	UpdateStepStatus(stepID int, status string, output string) error
 	ExecuteBuild(buildID int) error
-} 
+}

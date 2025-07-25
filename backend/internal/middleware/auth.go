@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"simple-ci/internal/model"
-	"simple-ci/internal/service"
+	"Vortexia/internal/model"
+	"Vortexia/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -102,4 +102,4 @@ func GetCurrentUserID(c *gin.Context) (int, bool) {
 
 	id, ok := userID.(int)
 	return id, ok
-} 
+}

@@ -10,18 +10,18 @@ import (
 	"syscall"
 	"time"
 
-	"simple-ci/internal/api/routes"
-	"simple-ci/internal/config"
-	"simple-ci/internal/repository"
-	"simple-ci/internal/service"
-	"simple-ci/pkg/logger"
+	"Vortexia/internal/api/routes"
+	"Vortexia/internal/config"
+	"Vortexia/internal/repository"
+	"Vortexia/internal/service"
+	"Vortexia/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )
 
-// @title Simple CI/CD API
+// @title Vortexia API
 // @version 1.0
-// @description A simple CI/CD pipeline tool API
+// @description A modern CI/CD pipeline tool API
 // @host localhost:8080
 // @BasePath /api/v1
 // @schemes http
@@ -95,4 +95,4 @@ func main() {
 	}
 
 	logger.Info("Server exiting")
-} 
+}

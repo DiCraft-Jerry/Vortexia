@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"simple-ci/internal/model"
-	"simple-ci/internal/service"
+	"Vortexia/internal/model"
+	"Vortexia/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -54,4 +54,4 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		Message: "登录成功",
 		Data:    response,
 	})
-} 
+}

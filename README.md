@@ -1,4 +1,4 @@
-# Simple CI/CD
+# Vortexia
 
 一个基于 Go + React 构建的现代化 CI/CD 流水线工具
 
@@ -32,7 +32,7 @@
 ## 📁 项目结构
 
 ```
-simple-ci/
+Vortexia/
 ├── backend/                 # Go后端服务
 │   ├── cmd/                # 应用入口
 │   ├── internal/           # 内部包
@@ -77,7 +77,7 @@ simple-ci/
 
 ```bash
 git clone <repository-url>
-cd simple-ci
+cd Vortexia
 ```
 
 2. **启动基础服务**

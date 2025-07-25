@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
-	"simple-ci/internal/config"
-	"simple-ci/internal/model"
-	"simple-ci/internal/repository"
+	"Vortexia/internal/config"
+	"Vortexia/internal/model"
+	"Vortexia/internal/repository"
 
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -72,7 +72,7 @@ func (s *authService) ValidateToken(tokenString string) (*model.User, error) {
 	// 验证claims
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userID := int(claims["user_id"].(float64))
-		
+
 		// 从数据库获取用户信息
 		user, err := s.userRepo.GetByID(userID)
 		if err != nil {
@@ -117,4 +117,4 @@ func (s *authService) GenerateToken(user *model.User) (string, error) {
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(bytes), err
-} 
+}

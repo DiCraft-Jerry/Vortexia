@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"simple-ci/internal/model"
+	"Vortexia/internal/model"
 )
 
 type userRepository struct {
@@ -23,7 +23,7 @@ func (r *userRepository) Create(user *model.User) error {
 		INSERT INTO users (username, email, password_hash, role, is_active, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id`
-	
+
 	now := time.Now()
 	err := r.db.QueryRow(
 		query,
@@ -35,11 +35,11 @@ func (r *userRepository) Create(user *model.User) error {
 		now,
 		now,
 	).Scan(&user.ID)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to create user: %w", err)
 	}
-	
+
 	user.CreatedAt = now
 	user.UpdatedAt = now
 	return nil
@@ -51,7 +51,7 @@ func (r *userRepository) GetByID(id int) (*model.User, error) {
 		SELECT id, username, email, password_hash, role, is_active, created_at, updated_at
 		FROM users
 		WHERE id = $1`
-	
+
 	user := &model.User{}
 	err := r.db.QueryRow(query, id).Scan(
 		&user.ID,
@@ -63,14 +63,14 @@ func (r *userRepository) GetByID(id int) (*model.User, error) {
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)
-	
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("failed to get user by id: %w", err)
 	}
-	
+
 	return user, nil
 }
 
@@ -80,7 +80,7 @@ func (r *userRepository) GetByUsername(username string) (*model.User, error) {
 		SELECT id, username, email, password_hash, role, is_active, created_at, updated_at
 		FROM users
 		WHERE username = $1`
-	
+
 	user := &model.User{}
 	err := r.db.QueryRow(query, username).Scan(
 		&user.ID,
@@ -92,14 +92,14 @@ func (r *userRepository) GetByUsername(username string) (*model.User, error) {
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)
-	
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("failed to get user by username: %w", err)
 	}
-	
+
 	return user, nil
 }
 
@@ -109,7 +109,7 @@ func (r *userRepository) GetByEmail(email string) (*model.User, error) {
 		SELECT id, username, email, password_hash, role, is_active, created_at, updated_at
 		FROM users
 		WHERE email = $1`
-	
+
 	user := &model.User{}
 	err := r.db.QueryRow(query, email).Scan(
 		&user.ID,
@@ -121,14 +121,14 @@ func (r *userRepository) GetByEmail(email string) (*model.User, error) {
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)
-	
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("failed to get user by email: %w", err)
 	}
-	
+
 	return user, nil
 }
 
@@ -138,7 +138,7 @@ func (r *userRepository) Update(user *model.User) error {
 		UPDATE users 
 		SET username = $1, email = $2, role = $3, is_active = $4, updated_at = $5
 		WHERE id = $6`
-	
+
 	_, err := r.db.Exec(
 		query,
 		user.Username,
@@ -148,23 +148,23 @@ func (r *userRepository) Update(user *model.User) error {
 		time.Now(),
 		user.ID,
 	)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to update user: %w", err)
 	}
-	
+
 	return nil
 }
 
 // Delete 删除用户
 func (r *userRepository) Delete(id int) error {
 	query := `DELETE FROM users WHERE id = $1`
-	
+
 	_, err := r.db.Exec(query, id)
 	if err != nil {
 		return fmt.Errorf("failed to delete user: %w", err)
 	}
-	
+
 	return nil
 }
 
@@ -177,20 +177,20 @@ func (r *userRepository) List(offset, limit int) ([]*model.User, int, error) {
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count users: %w", err)
 	}
-	
+
 	// 获取列表
 	query := `
 		SELECT id, username, email, password_hash, role, is_active, created_at, updated_at
 		FROM users
 		ORDER BY created_at DESC
 		LIMIT $1 OFFSET $2`
-	
+
 	rows, err := r.db.Query(query, limit, offset)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to list users: %w", err)
 	}
 	defer rows.Close()
-	
+
 	var users []*model.User
 	for rows.Next() {
 		user := &model.User{}
@@ -209,6 +209,6 @@ func (r *userRepository) List(offset, limit int) ([]*model.User, int, error) {
 		}
 		users = append(users, user)
 	}
-	
+
 	return users, total, nil
-} 
+}

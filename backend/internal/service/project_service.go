@@ -4,8 +4,8 @@ import (
 	"errors"
 	"math"
 
-	"simple-ci/internal/model"
-	"simple-ci/internal/repository"
+	"Vortexia/internal/model"
+	"Vortexia/internal/repository"
 )
 
 type projectService struct {
@@ -99,4 +99,4 @@ func (s *projectService) List(page, pageSize int) (*model.PaginationResponse, er
 		PageSize:   pageSize,
 		TotalPages: totalPages,
 	}, nil
-} 
+}

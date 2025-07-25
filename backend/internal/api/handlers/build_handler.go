@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"simple-ci/internal/model"
-	"simple-ci/internal/service"
+	"Vortexia/internal/model"
+	"Vortexia/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -75,4 +75,4 @@ func (h *BuildHandler) WatchLogs(c *gin.Context) {
 		Code:    http.StatusOK,
 		Message: "WebSocket功能开发中",
 	})
-} 
+}

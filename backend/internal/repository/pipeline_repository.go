@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"simple-ci/internal/model"
+	"Vortexia/internal/model"
 )
 
 type pipelineRepository struct {
@@ -23,7 +23,7 @@ func (r *pipelineRepository) Create(pipeline *model.Pipeline) error {
 		INSERT INTO pipelines (project_id, name, config, is_active, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id`
-	
+
 	now := time.Now()
 	err := r.db.QueryRow(
 		query,
@@ -34,11 +34,11 @@ func (r *pipelineRepository) Create(pipeline *model.Pipeline) error {
 		now,
 		now,
 	).Scan(&pipeline.ID)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to create pipeline: %w", err)
 	}
-	
+
 	pipeline.CreatedAt = now
 	pipeline.UpdatedAt = now
 	return nil
@@ -50,7 +50,7 @@ func (r *pipelineRepository) GetByID(id int) (*model.Pipeline, error) {
 		SELECT id, project_id, name, config, is_active, created_at, updated_at
 		FROM pipelines
 		WHERE id = $1`
-	
+
 	pipeline := &model.Pipeline{}
 	err := r.db.QueryRow(query, id).Scan(
 		&pipeline.ID,
@@ -61,14 +61,14 @@ func (r *pipelineRepository) GetByID(id int) (*model.Pipeline, error) {
 		&pipeline.CreatedAt,
 		&pipeline.UpdatedAt,
 	)
-	
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("failed to get pipeline by id: %w", err)
 	}
-	
+
 	return pipeline, nil
 }
 
@@ -79,13 +79,13 @@ func (r *pipelineRepository) GetByProject(projectID int) ([]*model.Pipeline, err
 		FROM pipelines
 		WHERE project_id = $1 AND is_active = true
 		ORDER BY created_at DESC`
-	
+
 	rows, err := r.db.Query(query, projectID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get pipelines by project: %w", err)
 	}
 	defer rows.Close()
-	
+
 	var pipelines []*model.Pipeline
 	for rows.Next() {
 		pipeline := &model.Pipeline{}
@@ -103,7 +103,7 @@ func (r *pipelineRepository) GetByProject(projectID int) ([]*model.Pipeline, err
 		}
 		pipelines = append(pipelines, pipeline)
 	}
-	
+
 	return pipelines, nil
 }
 
@@ -113,7 +113,7 @@ func (r *pipelineRepository) Update(pipeline *model.Pipeline) error {
 		UPDATE pipelines 
 		SET name = $1, config = $2, is_active = $3, updated_at = $4
 		WHERE id = $5`
-	
+
 	_, err := r.db.Exec(
 		query,
 		pipeline.Name,
@@ -122,23 +122,23 @@ func (r *pipelineRepository) Update(pipeline *model.Pipeline) error {
 		time.Now(),
 		pipeline.ID,
 	)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to update pipeline: %w", err)
 	}
-	
+
 	return nil
 }
 
 // Delete 删除流水线
 func (r *pipelineRepository) Delete(id int) error {
 	query := `UPDATE pipelines SET is_active = false WHERE id = $1`
-	
+
 	_, err := r.db.Exec(query, id)
 	if err != nil {
 		return fmt.Errorf("failed to delete pipeline: %w", err)
 	}
-	
+
 	return nil
 }
 
@@ -151,7 +151,7 @@ func (r *pipelineRepository) List(offset, limit int) ([]*model.Pipeline, int, er
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count pipelines: %w", err)
 	}
-	
+
 	// 获取列表
 	query := `
 		SELECT id, project_id, name, config, is_active, created_at, updated_at
@@ -159,13 +159,13 @@ func (r *pipelineRepository) List(offset, limit int) ([]*model.Pipeline, int, er
 		WHERE is_active = true
 		ORDER BY created_at DESC
 		LIMIT $1 OFFSET $2`
-	
+
 	rows, err := r.db.Query(query, limit, offset)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to list pipelines: %w", err)
 	}
 	defer rows.Close()
-	
+
 	var pipelines []*model.Pipeline
 	for rows.Next() {
 		pipeline := &model.Pipeline{}
@@ -183,6 +183,6 @@ func (r *pipelineRepository) List(offset, limit int) ([]*model.Pipeline, int, er
 		}
 		pipelines = append(pipelines, pipeline)
 	}
-	
+
 	return pipelines, total, nil
-} 
+}

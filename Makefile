@@ -2,7 +2,7 @@
 
 # 默认目标
 help:
-	@echo "Simple CI/CD 项目构建工具"
+	@echo "Vortexia 项目构建工具"
 	@echo ""
 	@echo "可用命令:"
 	@echo "  setup     - 初始化项目依赖"
@@ -54,9 +54,9 @@ clean:
 # 构建Docker镜像
 docker:
 	@echo "🐳 构建Docker镜像..."
-	docker build -t simple-ci-backend:latest backend/
+	docker build -t vortexia-backend:latest backend/
 	cd frontend && npm run build
-	docker build -t simple-ci-frontend:latest -f docker/frontend.Dockerfile .
+	docker build -t vortexia-frontend:latest -f docker/frontend.Dockerfile .
 	@echo "✅ Docker镜像构建完成"
 
 # 启动所有服务
@@ -78,5 +78,5 @@ logs:
 # 数据库迁移
 migrate:
 	@echo "📊 运行数据库迁移..."
-	cd backend && go run github.com/pressly/goose/v3/cmd/goose postgres "host=localhost port=5432 user=ci_user password=ci_password dbname=simple_ci sslmode=disable" up
+	cd backend && go run github.com/pressly/goose/v3/cmd/goose postgres "host=localhost port=5432 user=ci_user password=ci_password dbname=vortexia_db sslmode=disable" up
 	@echo "✅ 数据库迁移完成" 

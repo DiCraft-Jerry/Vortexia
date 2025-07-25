@@ -1,8 +1,8 @@
-# Simple CI/CD 开发指南
+# Vortexia 开发指南
 
 ## 📋 项目概述
 
-Simple CI/CD 是一个基于 Go + React 构建的轻量级持续集成/持续部署平台，针对 1核2GB 服务器环境进行了优化。
+Vortexia 是一个基于 Go + React 构建的轻量级持续集成/持续部署平台，针对 1核2GB 服务器环境进行了优化。
 
 ## 🛠️ 技术栈
 
@@ -43,7 +43,7 @@ make setup
 
 # 或手动设置
 git clone <项目地址>
-cd simple-ci
+cd Vortexia
 
 # 后端依赖
 cd backend && go mod tidy
@@ -201,8 +201,8 @@ npm run test:coverage
 make docker
 
 # 单独构建
-docker build -t simple-ci-backend backend/
-docker build -t simple-ci-frontend frontend/
+docker build -t vortexia-backend backend/
+docker build -t vortexia-frontend frontend/
 ```
 
 ### 2. 运行容器
@@ -232,7 +232,7 @@ DB_HOST=postgres
 DB_PORT=5432
 DB_USER=ci_user
 DB_PASSWORD=ci_password
-DB_NAME=simple_ci
+DB_NAME=vortexia_db
 
 # Redis配置
 REDIS_HOST=redis
@@ -276,7 +276,7 @@ db.SetMaxIdleConns(2)
    docker ps | grep postgres
 
    # 查看日志
-   docker logs simple-ci-postgres
+   docker logs vortexia-postgres
    ```
 2. **前端依赖错误**
 
@@ -302,7 +302,7 @@ db.SetMaxIdleConns(2)
 docker stats
 
 # 数据库性能
-docker exec -it simple-ci-postgres psql -U ci_user -d simple_ci -c "SELECT * FROM pg_stat_activity;"
+docker exec -it vortexia-postgres psql -U ci_user -d vortexia_db -c "SELECT * FROM pg_stat_activity;"
 
 # API响应时间
 curl -w "@curl-format.txt" -o /dev/null -s "http://localhost:8080/api/v1/health"

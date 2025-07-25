@@ -1,8 +1,8 @@
 package service
 
 import (
-	"simple-ci/internal/model"
-	"simple-ci/internal/repository"
+	"Vortexia/internal/model"
+	"Vortexia/internal/repository"
 )
 
 type pipelineService struct {
@@ -44,4 +44,4 @@ func (s *pipelineService) Delete(id int) error {
 func (s *pipelineService) List(page, pageSize int) (*model.PaginationResponse, error) {
 	// TODO: 实现分页逻辑
 	return nil, nil
-} 
+}
